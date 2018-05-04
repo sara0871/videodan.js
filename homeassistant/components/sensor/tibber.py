@@ -125,6 +125,10 @@ class TibberSensor(Entity):
             await self._tibber_home.update_info()
             await  self._tibber_home.update_price_info()
         except (asyncio.TimeoutError, aiohttp.ClientError):
+            _LOGGER.error("No data")
+            return
+        if not self._tibber_home.info:
+            _LOGGER.error("No data")
             return
         data = self._tibber_home.info['viewer']['home']
         self._device_state_attributes['app_nickname'] = data['appNickname']
